@@ -155,7 +155,7 @@ export const resetPassword = asyncHandler(async (req, res, next) => {
     user.password = hashedNewPassword;
     user.otp = undefined;
     user.otpExpiry = undefined;
-    user.passwordChangeAt = Date.now(); // Update password change time
+    user.passwordChangeAt = Date.now(); 
     await user.save();
     res.status(200).json({ msg: "Password reset successfully" });
 });
