@@ -80,7 +80,7 @@ export const getTransactions = asyncHandler(async (req, res) => {
     const account = await Account.findOne({ user: req.user._id });
 
     if (!account) {
-        return res.status(404).json({ msg: 'Account not found' });
+        return next(new AppError("account not found"));
     }
 
     const transactions = await Transaction.find({ account: account._id });
