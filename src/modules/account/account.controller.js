@@ -78,12 +78,20 @@ export const getBalance = asyncHandler(async (req, res) => {
 // Get Transactions
 export const getTransactions = asyncHandler(async (req, res) => {
     const account = await Account.findOne({ user: req.user._id });
-
     if (!account) {
         return next(new AppError("account not found"));
     }
-
-    const transactions = await Transaction.find({ account: account._id });
-    res.status(200).json(transactions);
+    const apiFeature = new ApiFeatures(Transaction.find({ account: account._id }), req.query)
+        .pagination()
+        .filter()
+        .sort()
+        .select()
+        .search();
+    const transactions = await apiFeature.mongooseQuery;
+    res.status(200).json({
+        msg: 'Transactions retrieved successfully',
+        page: apiFeature.page,
+        transactions
+    });
 });
 
